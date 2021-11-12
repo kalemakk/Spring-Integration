@@ -7,9 +7,17 @@
 
 
     <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
-                         default-request-channel="in"/>
+                         default-request-channel="pollableChannel"/>
 
-<!--    <integration:channel id="in"/>-->
+    <integration:channel id="pollableChannel">
+        <integration:queue capacity="10"/>
+    </integration:channel>
+
+
+    <integration:bridge input-channel="pollableChannel" output-channel="in">
+        <integration:poller fixed-delay="5" time-unit="SECONDS" max-messages-per-poll="2" />
+    </integration:bridge>
+
 
 
     <task:executor id="executor" pool-size="5"/>
