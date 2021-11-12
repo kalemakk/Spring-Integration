@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:integration="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+    <integration:gateway service-interface="com.example.springintegration.PassengerInterface"
+                         default-request-channel="input">
+        <integration:method name="sayHi"/>
+    </integration:gateway>
+
+    <integration:channel id="input" />
+    <integration:channel id="output" />
+
+    <integration:service-activator ref="say" input-channel="input" method="printMessage"/>
+
+    <bean id="say" class="com.example.springintegration.Pass"/>
+
+
+
+
+
+    <bean id="customComparator" class="com.example.springintegration.CustomMessageComparator"/>
+
+    <integration:channel id="in">
+<!--        <integration:queue capacity="5"/>-->
+        <integration:priority-queue capacity="10" comparator="customComparator"/>
+    </integration:channel>
+    <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
+                         default-request-channel="in"/>
+
+    <integration:service-activator ref="printService"
+                                   method="print"
+                                   input-channel="in">
+        <integration:poller fixed-rate="10" time-unit="SECONDS" max-messages-per-poll="2"/>
+    </integration:service-activator>
+
+
+    <bean class="com.example.springintegration.PrintService" id="printService"/>
+
+
+
+</beans>

@@ -5,8 +5,31 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-    <integration:channel id="names"/>
-    <integration:service-activator input-channel="names" ref="helloService" method="sayHello"/>
-    <bean name="helloService" class="com.example.springintegration.SayHello" />
+<!--    <integration:channel id="names"/>-->
+<!--    <integration:service-activator input-channel="names" ref="helloService" method="sayHello1"/>-->
+
+
+
+
+
+<!--    <integration:channel id="inputChannel" />-->
+
+<!--    <integration:channel id="outputChannel" >-->
+<!--        <integration:queue capacity="5"/>-->
+<!--    </integration:channel>-->
+
+<!--    <integration:channel id="transChannel" />-->
+<!--    -->
+
+<!--    <integration:service-activator-->
+<!--            input-channel="inputChannel"-->
+<!--            output-channel="outputChannel"-->
+<!--            ref="sayHello"-->
+<!--            method="sayHello"/>-->
+
+<!--    <bean id="sayHello" class="com.example.springintegration.SayHello"/>-->
+<!--    <bean name="helloService" class="com.example.springintegration.SayHello" />-->
+
+
 
 </beans>
