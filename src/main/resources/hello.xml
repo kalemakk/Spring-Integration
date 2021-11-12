@@ -2,13 +2,21 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:integration="http://www.springframework.org/schema/integration"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
 
     <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
                          default-request-channel="in"/>
 
-    <integration:channel id="in"/>
+<!--    <integration:channel id="in"/>-->
+
+
+    <task:executor id="executor" pool-size="5"/>
+
+
+    <integration:publish-subscribe-channel id="in" task-executor="executor"/>
+
 
     <bean class="com.example.springintegration.PrintServiceUpperCase" id="upperPrintService"/>
     <bean class="com.example.springintegration.PrintService" id="PrintService"/>
@@ -16,13 +24,11 @@
 
     <integration:service-activator ref="upperPrintService"
                                    method="print"
-                                   order="2"
                                    input-channel="in">
     </integration:service-activator>
 
     <integration:service-activator ref="PrintService"
                                    method="print"
-                                   order="1"
                                    input-channel="in">
     </integration:service-activator>
 
