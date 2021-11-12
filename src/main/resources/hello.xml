@@ -4,40 +4,26 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-    <integration:gateway service-interface="com.example.springintegration.PassengerInterface"
-                         default-request-channel="input">
-        <integration:method name="sayHi"/>
-    </integration:gateway>
 
-    <integration:channel id="input" />
-    <integration:channel id="output" />
-
-    <integration:service-activator ref="say" input-channel="input" method="printMessage"/>
-
-    <bean id="say" class="com.example.springintegration.Pass"/>
-
-
-
-
-
-    <bean id="customComparator" class="com.example.springintegration.CustomMessageComparator"/>
-
-    <integration:channel id="in">
-<!--        <integration:queue capacity="5"/>-->
-        <integration:priority-queue capacity="10" comparator="customComparator"/>
-    </integration:channel>
     <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
                          default-request-channel="in"/>
 
-    <integration:service-activator ref="printService"
+    <integration:channel id="in"/>
+
+    <bean class="com.example.springintegration.PrintServiceUpperCase" id="upperPrintService"/>
+    <bean class="com.example.springintegration.PrintService" id="PrintService"/>
+
+
+    <integration:service-activator ref="upperPrintService"
                                    method="print"
+                                   order="2"
                                    input-channel="in">
-        <integration:poller fixed-rate="10" time-unit="SECONDS" max-messages-per-poll="2"/>
     </integration:service-activator>
 
-
-    <bean class="com.example.springintegration.PrintService" id="printService"/>
-
-
+    <integration:service-activator ref="PrintService"
+                                   method="print"
+                                   order="1"
+                                   input-channel="in">
+    </integration:service-activator>
 
 </beans>
