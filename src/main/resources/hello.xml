@@ -5,30 +5,30 @@
        xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
-
     <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
                          default-request-channel="pollableChannel"/>
 
+
+    <bean class="com.example.springintegration.CustomChannelInterceptor" id="channelInterceptor"/>
+
     <integration:channel id="pollableChannel">
         <integration:queue capacity="10"/>
+        <integration:interceptors>
+            <integration:ref bean="channelInterceptor"/>
+        </integration:interceptors>
     </integration:channel>
 
-
     <integration:bridge input-channel="pollableChannel" output-channel="in">
-        <integration:poller fixed-delay="5" time-unit="SECONDS" max-messages-per-poll="2" />
+        <integration:poller fixed-delay="10" time-unit="SECONDS" max-messages-per-poll="2" />
     </integration:bridge>
-
 
 
     <task:executor id="executor" pool-size="5"/>
 
-
     <integration:publish-subscribe-channel id="in" task-executor="executor"/>
-
 
     <bean class="com.example.springintegration.PrintServiceUpperCase" id="upperPrintService"/>
     <bean class="com.example.springintegration.PrintService" id="PrintService"/>
-
 
     <integration:service-activator ref="upperPrintService"
                                    method="print"
