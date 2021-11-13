@@ -6,24 +6,31 @@
 
 
     <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
-                         default-request-channel="in"/>
+                         default-request-channel="inputChannel"/>
 
-    <integration:channel id="in"/>
+    <integration:channel id="inputChannel"/>
+    <integration:channel id="numericChannel"/>
+    <integration:channel id="stringChannel"/>
 
-    <bean class="com.example.springintegration.PrintServiceUpperCase" id="upperPrintService"/>
-    <bean class="com.example.springintegration.PrintService" id="PrintService"/>
+
+    <integration:payload-type-router>
+        <integration:mapping type="java.lang.Integer" channel="numericChannel"/>
+        <integration:mapping type="java.lang.String" channel="stringChannel"/>
+    </integration:payload-type-router>
 
 
-    <integration:service-activator ref="upperPrintService"
+    <bean class="com.example.springintegration.NumericPrint" id="numericPrintService"/>
+    <bean class="com.example.springintegration.PrintService" id="printService"/>
+
+
+    <integration:service-activator ref="numericPrintService"
                                    method="print"
-                                   order="2"
-                                   input-channel="in">
+                                   input-channel="numericChannel">
     </integration:service-activator>
 
-    <integration:service-activator ref="PrintService"
+    <integration:service-activator ref="printService"
                                    method="print"
-                                   order="1"
-                                   input-channel="in">
+                                   input-channel="stringChannel">
     </integration:service-activator>
 
 </beans>
