@@ -16,9 +16,6 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.messaging.support.MessageBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Future;
 
 @SpringBootApplication
 @Configuration
@@ -36,8 +33,8 @@ public class SpringIntegrationApplication implements ApplicationRunner {
     public void run(ApplicationArguments arguments) throws Exception{
 
         for (int i =0; i<10; i++){
-            Message<String> message = MessageBuilder
-                    .withPayload("Printing message payload "+i)
+            Message<?> message = MessageBuilder
+                    .withPayload(i)
                     .build();
             this.printGateWay.print(message);
         }
