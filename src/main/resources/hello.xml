@@ -8,15 +8,31 @@
     <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
                          default-request-channel="inputChannel"/>
 
-    <integration:channel id="inputChannel"/>
-    <integration:channel id="outputChannel"/>
+    <integration:channel id="inputChannel">
+<!--        <integration:interceptors>-->
+<!--            <ref bean="customInterceptor"/>-->
+<!--        </integration:interceptors>-->
+    </integration:channel>
 
-    <integration:splitter input-channel="inputChannel" output-channel="outputChannel" ref="customSplitter" method="split"/>
+    <integration:channel id="aggregatorChannel"/>
+
+
+    <integration:channel id="outputChannel" />
+
+
+    <integration:splitter input-channel="inputChannel" output-channel="aggregatorChannel" ref="customSplitter" method="split"/>
+
+
+
+    <integration:aggregator input-channel="aggregatorChannel" output-channel="outputChannel"/>
+
+
 
     <bean class="com.example.springintegration.CustomSplitter" id="customSplitter"/>
 
     <bean class="com.example.springintegration.PrintService" id="printService"/>
 
+    <bean class="com.example.springintegration.CustomInterceptor" id="customInterceptor"/>
 
     <integration:service-activator ref="printService"
                                    method="print"
