@@ -34,7 +34,7 @@ public class SpringIntegrationApplication implements ApplicationRunner {
 
         for (int i =0; i<10; i++){
             Message<?> message = MessageBuilder
-                    .withPayload("This is a String "+i)
+                    .withPayload(i)
                     .build();
             this.printGateWay.print(message);
         }
