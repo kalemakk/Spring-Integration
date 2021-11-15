@@ -12,15 +12,18 @@
     <integration:channel id="numericChannel"/>
     <integration:channel id="stringChannel"/>
 
+    <integration:channel id="defaultChannel"/>
 
-    <integration:recipient-list-router input-channel="inputChannel">
-        <integration:recipient channel="numericChannel"/>
-        <integration:recipient channel="stringChannel"/>
-    </integration:recipient-list-router>
+
+
+    <bean class="com.example.springintegration.CustomRouter" id="customRouter"/>
+
+    <integration:router input-channel="inputChannel" ref="customRouter"/>
 
 
     <bean class="com.example.springintegration.NumericPrint" id="numericPrintService"/>
     <bean class="com.example.springintegration.PrintService" id="printService"/>
+    <bean class="com.example.springintegration.Default" id="defaultService"/>
 
 
     <integration:service-activator ref="numericPrintService"
@@ -31,6 +34,10 @@
     <integration:service-activator ref="printService"
                                    method="print"
                                    input-channel="stringChannel">
+    </integration:service-activator>
+
+    <integration:service-activator ref="defaultService" input-channel="defaultChannel" method="print">
+
     </integration:service-activator>
 
 </beans>
