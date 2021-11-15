@@ -4,34 +4,20 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-
     <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
                          default-request-channel="inputChannel"/>
 
     <integration:channel id="inputChannel"/>
 
-    <integration:channel id="aggregatorChannel"/>
+    <integration:transformer input-channel="inputChannel" output-channel="outputChannel" expression="payload.toUpperCase()" />
 
     <integration:channel id="outputChannel" />
-
-    <integration:splitter input-channel="inputChannel" output-channel="aggregatorChannel" ref="customSplitter" method="split"/>
-
-    <integration:aggregator ref="customAggregator" input-channel="aggregatorChannel" output-channel="outputChannel">
-
-    </integration:aggregator>
-
-
-    <bean class="com.example.springintegration.CustomAggregator" id="customAggregator"/>
-
-    <bean class="com.example.springintegration.CustomSplitter" id="customSplitter"/>
-
-    <bean class="com.example.springintegration.PrintService" id="printService"/>
-
-    <bean class="com.example.springintegration.CustomInterceptor" id="customInterceptor"/>
 
     <integration:service-activator ref="printService"
                                    method="print"
                                    input-channel="outputChannel">
     </integration:service-activator>
+
+    <bean class="com.example.springintegration.PrintService" id="printService"/>
 
 </beans>

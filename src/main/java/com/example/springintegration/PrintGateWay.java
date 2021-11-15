@@ -6,6 +6,5 @@ import java.util.concurrent.Future;
 
 public interface PrintGateWay {
     Future<Message<?>> print(Message<?> message);
-//    Message<String> print(Message<String> message);
 
 }
