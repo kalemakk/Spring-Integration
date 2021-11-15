@@ -32,9 +32,9 @@ public class SpringIntegrationApplication implements ApplicationRunner {
 
     public void run(ApplicationArguments arguments) throws Exception{
 
-        for (int i =0; i<10; i++){
+        for (int i =0; i<2; i++){
             Message<?> message = MessageBuilder
-                    .withPayload("Kalema Arnold Arno")
+                    .withPayload("Kalema Arnold")
                     .build();
             this.printGateWay.print(message);
         }
