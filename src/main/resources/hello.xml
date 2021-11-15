@@ -13,10 +13,10 @@
     <integration:channel id="stringChannel"/>
 
 
-    <integration:payload-type-router input-channel="inputChannel">
-        <integration:mapping type="java.lang.Integer" channel="numericChannel"/>
-        <integration:mapping type="java.lang.String" channel="stringChannel"/>
-    </integration:payload-type-router>
+    <integration:header-value-router input-channel="inputChannel" header-name="routerHeader">
+        <integration:mapping value="numeric" channel="numericChannel"/>
+        <integration:mapping value="string" channel="stringChannel"/>
+    </integration:header-value-router>
 
 
     <bean class="com.example.springintegration.NumericPrint" id="numericPrintService"/>

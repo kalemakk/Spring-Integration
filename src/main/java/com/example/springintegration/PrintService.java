@@ -5,6 +5,6 @@ import org.springframework.messaging.support.MessageBuilder;
 
 public class PrintService {
     public void print(Message<?> message) {
-        System.out.println(message.getPayload());
+        System.out.println("String Printed is : "+message.getPayload());
     }
 }
