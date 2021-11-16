@@ -13,8 +13,10 @@
     <integration:channel id="outputChannel" />
 
     <integration:header-enricher input-channel="inputChannel" output-channel="enricherChannel">
-        <integration:header name="publicKey" value="54321"/>
+        <integration:header name="publicKey" method="setHeader" ref="customHeaderEnricher"/>
     </integration:header-enricher>
+
+    <bean class="com.example.springintegration.CustomHeaderEnricher" id="customHeaderEnricher"/>
 
     <integration:header-filter header-names="private key" input-channel="enricherChannel" output-channel="filterChannel"/>
 
