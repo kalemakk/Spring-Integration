@@ -32,11 +32,16 @@ public class SpringIntegrationApplication implements ApplicationRunner {
 
     public void run(ApplicationArguments arguments) throws Exception{
 
-        String[] payLoad = {"Kalema Arnold","Sharp Denis","Alex Nuwa","Brain Okoth"};
+        Person[] person = {
+                new Person("Kalema","Arnold"),
+                new Person("Sharp","Denis"),
+                new Person("Alex","Nuwa"),
+                new Person("Brain","Okoth")
+        };
 
-        for (int i =0; i<payLoad.length; i++){
+        for (int i =0; i<person.length; i++){
             Message<?> message = MessageBuilder
-                    .withPayload(payLoad[i])
+                    .withPayload(person[i])
                     .build();
             this.printGateWay.print(message);
         }
