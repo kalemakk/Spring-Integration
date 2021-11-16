@@ -42,6 +42,7 @@ public class SpringIntegrationApplication implements ApplicationRunner {
         for (int i =0; i<person.length; i++){
             Message<?> message = MessageBuilder
                     .withPayload(person[i])
+                    .setHeader("private key",123456)
                     .build();
             this.printGateWay.print(message);
         }
