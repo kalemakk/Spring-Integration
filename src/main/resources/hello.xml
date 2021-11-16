@@ -9,9 +9,10 @@
 
     <integration:channel id="inputChannel"/>
 
-    <integration:transformer input-channel="inputChannel" output-channel="outputChannel" expression="payload.toUpperCase()" />
-
     <integration:channel id="outputChannel" />
+
+    <integration:transformer input-channel="inputChannel" output-channel="outputChannel" ref="customTransformer"/>
+
 
     <integration:service-activator ref="printService"
                                    method="print"
@@ -19,5 +20,6 @@
     </integration:service-activator>
 
     <bean class="com.example.springintegration.PrintService" id="printService"/>
+    <bean class="com.example.springintegration.CustomTransformer" id="customTransformer"/>
 
 </beans>
