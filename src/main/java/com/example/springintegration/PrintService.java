@@ -6,11 +6,8 @@ import org.springframework.messaging.support.MessageBuilder;
 import java.util.Map;
 
 public class PrintService {
-    public void print(Message<?> message) {
-        System.out.println("Printing: "+message.getPayload());
+    public void print(Person person) {
+        System.out.println("First Name: "+person.firstName);
 
-        for(Map.Entry<String, Object> entry:message.getHeaders().entrySet()){
-            System.out.println(entry.getKey()+": "+entry.getValue());
-        }
     }
 }

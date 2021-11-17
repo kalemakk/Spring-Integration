@@ -4,27 +4,26 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-    <integration:gateway service-interface="com.example.springintegration.PrintGateWay"
-                         default-request-channel="inputChannel"/>
+    <integration:gateway service-interface="com.example.springintegration.EnhancedPrintService">
+        <integration:method request-channel="printChannel" name="print"/>
+        <integration:method request-channel="upperCaseChannel" name="fullName"/>
+    </integration:gateway>
 
-    <integration:channel id="inputChannel"/>
-    <integration:channel id="outputChannel"/>
+    <integration:channel id="printChannel"/>
+    <integration:channel id="upperCaseChannel"/>
 
     <integration:service-activator ref="caseService"
-                                   input-channel="inputChannel"
-                                   method="fullName"
-                                   output-channel="outputChannel">
+                                   input-channel="upperCaseChannel"
+                                   method="fullName">
     </integration:service-activator>
 
     <integration:service-activator ref="printService"
-                                   method="print"
-                                   input-channel="outputChannel">
+                                   input-channel="printChannel"
+                                   method="print">
     </integration:service-activator >
 
     <bean class="com.example.springintegration.PrintService" id="printService"/>
 
     <bean class="com.example.springintegration.UpperCaseService" id="caseService"/>
-
-
 
 </beans>

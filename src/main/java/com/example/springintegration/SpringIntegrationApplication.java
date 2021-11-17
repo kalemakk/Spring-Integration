@@ -17,40 +17,36 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.messaging.support.MessageBuilder;
 
+import java.util.concurrent.ExecutionException;
+
 
 @SpringBootApplication
 @Configuration
 @ImportResource("classpath*:hello.xml")
 public class SpringIntegrationApplication implements ApplicationRunner {
 
-
     @Autowired
-    PrintGateWay printGateWay;
-
-    @Autowired
-    @Qualifier("outputChannel")
-    MessageChannel outputChannel;
+    EnhancedPrintService enhancedPrintService;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringIntegrationApplication.class, args);
     }
 
-    public void run(ApplicationArguments arguments) throws Exception{
+    public void run(ApplicationArguments arguments) throws InterruptedException, ExecutionException {
 
         Person[] person = {
-                new Person("Kalema","Arnold"),
-                new Person("Sharp","Denis"),
-                new Person("Alex","Nuwa"),
-                new Person("Brain","Okoth")
+                new Person("Kalema", "Arnold"),
+                new Person("Sharp", "Denis"),
+                new Person("Alex", "Nuwa"),
+                new Person("Brain", "Okoth")
         };
 
-        for (int i =0; i<person.length; i++){
-            Message<?> message = MessageBuilder
-                    .withPayload(person[i])
-//                    .setHeader("private key",outputChannel)
-                    .setHeader("replyChannel","outputChannel")
-                    .build();
-            this.printGateWay.print(message);
+        for (int i = 0; i < person.length; i++) {
+
+            this.enhancedPrintService.print(person[i]);
+
+            String name = this.enhancedPrintService.fullName(person[i]);
+            System.out.println(name);
         }
 
     }
