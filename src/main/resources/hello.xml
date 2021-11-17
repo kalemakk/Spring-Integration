@@ -8,29 +8,23 @@
                          default-request-channel="inputChannel"/>
 
     <integration:channel id="inputChannel"/>
-    <integration:channel id="enricherChannel"/>
-    <integration:channel id="outputChannel" />
-    <integration:channel id="requestChannel" />
+    <integration:channel id="outputChannel"/>
 
-
-
-    <integration:service-activator ref="customService" input-channel="requestChannel" method="getPhoneNumber"/>
-
-    <integration:enricher input-channel="inputChannel" request-channel="requestChannel" output-channel="enricherChannel">
-        <integration:property name="phoneNumber" expression="payload"/>
-    </integration:enricher>
-
-    <integration:header-filter header-names="private key" input-channel="enricherChannel" output-channel="filterChannel"/>
-
-    <integration:object-to-json-transformer input-channel="filterChannel" output-channel="outputChannel"/>
+    <integration:service-activator ref="caseService"
+                                   input-channel="inputChannel"
+                                   method="fullName"
+                                   output-channel="outputChannel">
+    </integration:service-activator>
 
     <integration:service-activator ref="printService"
                                    method="print"
                                    input-channel="outputChannel">
-    </integration:service-activator>
+    </integration:service-activator >
 
     <bean class="com.example.springintegration.PrintService" id="printService"/>
 
-    <bean class="com.example.springintegration.CustomService" id="customService"/>
+    <bean class="com.example.springintegration.UpperCaseService" id="caseService"/>
+
+
 
 </beans>

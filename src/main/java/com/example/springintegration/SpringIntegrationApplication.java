@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
@@ -25,6 +26,10 @@ public class SpringIntegrationApplication implements ApplicationRunner {
 
     @Autowired
     PrintGateWay printGateWay;
+
+    @Autowired
+    @Qualifier("outputChannel")
+    MessageChannel outputChannel;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringIntegrationApplication.class, args);
@@ -42,7 +47,8 @@ public class SpringIntegrationApplication implements ApplicationRunner {
         for (int i =0; i<person.length; i++){
             Message<?> message = MessageBuilder
                     .withPayload(person[i])
-                    .setHeader("private key",123456)
+//                    .setHeader("private key",outputChannel)
+                    .setHeader("replyChannel","outputChannel")
                     .build();
             this.printGateWay.print(message);
         }
