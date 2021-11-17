@@ -3,11 +3,20 @@ package com.example.springintegration;
 public class Person {
     String firstName;
     String lastName;
+    String phoneNumber;
 
     public Person(String firstName, String lastName){
         super();
         this.firstName = firstName;
         this.lastName =lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getFirstName() {
