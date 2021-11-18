@@ -4,18 +4,15 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-    <integration:gateway service-interface="com.example.springintegration.EnhancedPrintService">
-        <integration:method request-channel="printChannel" name="print"/>
-        <integration:method request-channel="upperCaseChannel" name="fullName"/>
-    </integration:gateway>
+    <bean class="com.example.springintegration.PersonDirectoryService" id="personDirectoryService"/>
+
+    <integration:inbound-channel-adapter ref="personDirectoryService" channel="printChannel" method="newPerson">
+        <integration:poller fixed-rate="5" time-unit="SECONDS">
+
+        </integration:poller>
+    </integration:inbound-channel-adapter>
 
     <integration:channel id="printChannel"/>
-    <integration:channel id="upperCaseChannel"/>
-
-    <integration:service-activator ref="caseService"
-                                   input-channel="upperCaseChannel"
-                                   method="fullName">
-    </integration:service-activator>
 
     <integration:service-activator ref="printService"
                                    input-channel="printChannel"
@@ -23,7 +20,5 @@
     </integration:service-activator >
 
     <bean class="com.example.springintegration.PrintService" id="printService"/>
-
-    <bean class="com.example.springintegration.UpperCaseService" id="caseService"/>
 
 </beans>
