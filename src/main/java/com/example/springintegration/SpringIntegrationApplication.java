@@ -16,6 +16,8 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.util.concurrent.ExecutionException;
 
@@ -43,10 +45,22 @@ public class SpringIntegrationApplication implements ApplicationRunner {
 
         for (int i = 0; i < person.length; i++) {
 
-            this.enhancedPrintService.print(person[i]);
+//            this.enhancedPrintService.print(person[i]);
 
-            String name = this.enhancedPrintService.fullName(person[i]);
-            System.out.println(name);
+            System.out.println("Starting the Functions");
+            ListenableFuture<String> name = this.enhancedPrintService.fullName(person[i]);
+            name.addCallback(new ListenableFutureCallback<String>() {
+                @Override
+                public void onFailure(Throwable ex) {
+
+                }
+
+                @Override
+                public void onSuccess(String result) {
+                    System.out.println("Starting Success: ");
+                    System.out.println(result);
+                }
+            });
         }
 
     }

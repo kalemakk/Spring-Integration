@@ -1,6 +1,8 @@
 package com.example.springintegration;
 
+import org.springframework.util.concurrent.ListenableFuture;
+
 public interface EnhancedPrintService {
     void print(Person person);
-    String fullName(Person person);
+    ListenableFuture<String> fullName(Person person);
 }
