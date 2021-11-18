@@ -4,21 +4,17 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-    <bean class="com.example.springintegration.PersonDirectoryService" id="personDirectoryService"/>
-
     <integration:inbound-channel-adapter ref="personDirectoryService" channel="printChannel" method="newPerson">
         <integration:poller fixed-rate="5" time-unit="SECONDS">
 
         </integration:poller>
     </integration:inbound-channel-adapter>
 
+    <integration:outbound-channel-adapter ref="emailService" channel="printChannel" method="sendEmail"/>
+
     <integration:channel id="printChannel"/>
 
-    <integration:service-activator ref="printService"
-                                   input-channel="printChannel"
-                                   method="print">
-    </integration:service-activator >
-
-    <bean class="com.example.springintegration.PrintService" id="printService"/>
+    <bean class="com.example.springintegration.EmailService" id="emailService"/>
+    <bean class="com.example.springintegration.PersonDirectoryService" id="personDirectoryService"/>
 
 </beans>
