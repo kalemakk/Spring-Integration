@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int-file="http://www.springframework.org/schema/integration/file"
        xmlns:integration="http://www.springframework.org/schema/integration"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/file https://www.springframework.org/schema/integration/file/spring-integration-file.xsd">
 
-    <integration:inbound-channel-adapter ref="personDirectoryService" channel="printChannel" method="newPerson">
-        <integration:poller fixed-rate="5" time-unit="SECONDS">
-
+    <int-file:inbound-channel-adapter
+            channel="inputChannel"
+            directory="file:src"
+            filename-pattern="file.txt">
+        <integration:poller fixed-rate="2" time-unit="SECONDS">
         </integration:poller>
-    </integration:inbound-channel-adapter>
+    </int-file:inbound-channel-adapter>
 
-    <integration:outbound-channel-adapter ref="emailService" channel="printChannel" method="sendEmail"/>
+    <bean class="com.example.springintegration.FilesReader" id="filesReader"/>
 
-    <integration:channel id="printChannel"/>
+    <integration:channel id="inputChannel"/>
 
-    <bean class="com.example.springintegration.EmailService" id="emailService"/>
-    <bean class="com.example.springintegration.PersonDirectoryService" id="personDirectoryService"/>
+    <integration:service-activator ref="filesReader" input-channel="inputChannel"/>
+
+
 
 </beans>
