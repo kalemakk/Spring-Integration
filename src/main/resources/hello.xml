@@ -16,13 +16,15 @@
     <integration:channel id="inputChannel"/>
 
 
-    <int-file:outbound-channel-adapter
-            channel="inputChannel"
-            directory="file:src/test/write"
-            auto-create-directory="true"
-            delete-source-files="true"
-    />
+    <integration:channel id="transformChannel" />
 
+    <int-file:file-to-string-transformer input-channel="inputChannel" output-channel="transformChannel"/>
+
+<!--    <int-file:file-to-bytes-transformer input-channel="inputChannel" output-channel="transformChannel"/>-->
+
+    <bean class="com.example.springintegration.FilesReader" id="filesReader" />
+
+    <integration:service-activator input-channel="transformChannel" ref="filesReader" method="print1"/>
 
 
 </beans>

@@ -9,6 +9,12 @@ import java.io.FileReader;
 
 public class FilesReader {
 
+    public void print1(String file){
+        System.out.println("Printing Data from File");
+        System.out.println(file);
+    }
+
+
     public void print(File file) {
 
         BufferedReader bufferedReader = null;
