@@ -7,18 +7,21 @@
 
     <int-file:inbound-channel-adapter
             channel="inputChannel"
-            directory="file:src"
+            directory="file:src/test/read"
             filename-pattern="file.txt">
         <integration:poller fixed-rate="2" time-unit="SECONDS">
         </integration:poller>
     </int-file:inbound-channel-adapter>
 
-    <bean class="com.example.springintegration.FilesReader" id="filesReader"/>
-
     <integration:channel id="inputChannel"/>
 
-    <integration:service-activator ref="filesReader" input-channel="inputChannel"/>
 
+    <int-file:outbound-channel-adapter
+            channel="inputChannel"
+            directory="file:src/test/write"
+            auto-create-directory="true"
+            delete-source-files="true"
+    />
 
 
 
