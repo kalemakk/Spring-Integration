@@ -3,28 +3,41 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:int-file="http://www.springframework.org/schema/integration/file"
        xmlns:integration="http://www.springframework.org/schema/integration"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/file https://www.springframework.org/schema/integration/file/spring-integration-file.xsd">
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:int-jdbc="http://www.springframework.org/schema/integration/jdbc"
 
-    <int-file:inbound-channel-adapter
-            channel="inputChannel"
-            directory="file:src/test/read"
-            filename-pattern="file.txt">
-        <integration:poller fixed-rate="2" time-unit="SECONDS">
-        </integration:poller>
-    </int-file:inbound-channel-adapter>
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/integration
+          http://www.springframework.org/schema/integration/spring-integration.xsd
+           http://www.springframework.org/schema/integration/file
+            https://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+             http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+
+                 http://www.springframework.org/schema/integration/jdbc
+               http://www.springframework.org/schema/integration/jdbc/spring-integration-jdbc.xsd
+">
+
 
     <integration:channel id="inputChannel"/>
 
+    <jdbc:embedded-database id="datasource" type="H2">
+        <jdbc:script  location="classpath*:init.sql"/>
+    </jdbc:embedded-database>
 
-    <integration:channel id="transformChannel" />
+    <int-jdbc:inbound-channel-adapter
+            data-source="datasource"
+            channel="inputChannel"
+            query="select * from person"
+    >
+        <integration:poller fixed-rate="4000">
 
-    <int-file:file-to-string-transformer input-channel="inputChannel" output-channel="transformChannel"/>
+        </integration:poller>
+    </int-jdbc:inbound-channel-adapter>
 
-<!--    <int-file:file-to-bytes-transformer input-channel="inputChannel" output-channel="transformChannel"/>-->
 
-    <bean class="com.example.springintegration.FilesReader" id="filesReader" />
+    <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>
 
-    <integration:service-activator input-channel="transformChannel" ref="filesReader" method="print1"/>
-
+    <integration:service-activator input-channel="inputChannel" ref="messagePrinter" method="print"/>
 
 </beans>
