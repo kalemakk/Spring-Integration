@@ -19,13 +19,16 @@ import java.util.concurrent.ExecutionException;
 @ImportResource("classpath*:hello.xml")
 public class SpringIntegrationApplication implements ApplicationRunner {
 
+    @Autowired
+    PersonGateWay personGateWay;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringIntegrationApplication.class, args);
     }
 
     public void run(ApplicationArguments arguments) throws InterruptedException, ExecutionException {
-
+        Person person = new Person(2,"Kalema","Arnold");
+        this.personGateWay.save(person);
     }
 
 }

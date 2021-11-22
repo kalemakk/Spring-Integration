@@ -25,19 +25,20 @@
         <jdbc:script  location="classpath*:init.sql"/>
     </jdbc:embedded-database>
 
-    <int-jdbc:inbound-channel-adapter
+    <integration:gateway service-interface="com.example.springintegration.PersonGateWay"
+                         default-request-channel="inputChannel"
+
+    />
+
+    <int-jdbc:outbound-channel-adapter
             data-source="datasource"
-            channel="inputChannel"
-            query="select * from person"
-    >
-        <integration:poller fixed-rate="4000">
+            query="insert into person values(:payload.id,:payload.first_name,:payload.last_name)"
+            channel="inputChannel">
 
-        </integration:poller>
-    </int-jdbc:inbound-channel-adapter>
+    </int-jdbc:outbound-channel-adapter>
 
+<!--    <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>-->
 
-    <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>
-
-    <integration:service-activator input-channel="inputChannel" ref="messagePrinter" method="print"/>
+<!--    <integration:service-activator input-channel="inputChannel" ref="messagePrinter" method="print"/>-->
 
 </beans>
