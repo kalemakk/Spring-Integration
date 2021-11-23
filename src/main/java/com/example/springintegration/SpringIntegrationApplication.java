@@ -17,8 +17,6 @@ import java.util.concurrent.ExecutionException;
 @ImportResource("classpath*:context.xml")
 public class SpringIntegrationApplication implements ApplicationRunner {
 
-    @Autowired
-    CarGateWay carGateWay;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringIntegrationApplication.class, args);
@@ -26,7 +24,6 @@ public class SpringIntegrationApplication implements ApplicationRunner {
 
     public void run(ApplicationArguments arguments) throws InterruptedException, ExecutionException {
         Car car = new Car(2,"4MATICS","Toyota");
-        this.carGateWay.print(car);
     }
 
 }

@@ -10,6 +10,6 @@ public class MessagePrinter {
     }
 
     public void printConsole(Message<?> message){
-        System.out.println("Message sent is: "+message);
+        System.out.println(message);
     }
 }
