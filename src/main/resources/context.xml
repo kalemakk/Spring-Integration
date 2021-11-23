@@ -36,6 +36,10 @@
         <constructor-arg value="sample.queue"/>
     </bean>
 
+    <bean class="org.apache.activemq.command.ActiveMQQueue" id="replyMQQueue">
+        <constructor-arg value="reply.queue"/>
+    </bean>
+
     <jms:outbound-channel-adapter
             channel="outChannel"
             connection-factory="connectionFactory"
@@ -44,10 +48,11 @@
     </jms:outbound-channel-adapter>
 
 
-    <jms:message-driven-channel-adapter
+    <jms:inbound-gateway
     connection-factory="connectionFactory"
-    channel="jmsChannel"
-    destination="activeMQQueue"
+    request-channel="jmsChannel"
+    request-destination="activeMQQueue"
+    default-reply-destination="replyMQQueue"
     />
 
     <integration:object-to-string-transformer

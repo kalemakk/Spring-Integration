@@ -4,7 +4,8 @@ import org.springframework.messaging.Message;
 
 public class MessagePrinter {
 
-    public void print(Message<?> message){
+    public String print(Message<?> message){
         System.out.println("Message: "+message);
+        return "Message received successfully";
     }
 }
