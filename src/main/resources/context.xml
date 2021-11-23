@@ -24,6 +24,7 @@
     <integration:channel id="inputChannel"/>
     <integration:channel id="outChannel"/>
     <integration:channel id="jmsChannel"/>
+    <integration:channel id="replyChannel"/>
 
 
     <integration:gateway
@@ -40,13 +41,17 @@
         <constructor-arg value="reply.queue"/>
     </bean>
 
-    <jms:outbound-channel-adapter
-            channel="outChannel"
-            connection-factory="connectionFactory"
-            destination="activeMQQueue"
-    >
-    </jms:outbound-channel-adapter>
 
+    <jms:outbound-gateway
+    connection-factory="connectionFactory"
+    request-channel="outChannel"
+    request-destination="activeMQQueue"
+    reply-destination="replyMQQueue"
+    reply-channel="replyChannel"
+
+    >
+
+    </jms:outbound-gateway>
 
     <jms:inbound-gateway
     connection-factory="connectionFactory"
@@ -61,6 +66,9 @@
     />
 
     <integration:service-activator input-channel="jmsChannel" ref="messagePrinter" method="print"/>
+
+    <integration:service-activator input-channel="replyChannel" ref="messagePrinter" method="printConsole"/>
+
 
     <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>
 </beans>

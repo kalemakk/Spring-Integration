@@ -8,4 +8,8 @@ public class MessagePrinter {
         System.out.println("Message: "+message);
         return "Message received successfully";
     }
+
+    public void printConsole(Message<?> message){
+        System.out.println("Message sent is: "+message);
+    }
 }
