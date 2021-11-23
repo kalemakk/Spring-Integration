@@ -15,19 +15,21 @@
     <integration:channel id="httpChannel"/>
     <integration:channel id="outboundChannel"/>
 
-
-
     <http:outbound-channel-adapter
-            channel="httpChannel"
-
-
+            channel="outboundChannel"
+            http-method="GET"
+            url="http://localhost:8080/"
     />
 
-    <http:inbound-gateway request-channel="httpChannel"
-                          path="/"
+    <integration:gateway service-interface="com.example.springintegration.CarGateWay" default-request-channel="outboundChannel"/>
 
+    <http:inbound-gateway
+            request-channel="httpChannel"
+            path="/"
+            supported-methods="GET"
     />
 
+    <integration:service-activator input-channel="httpChannel" ref="messagePrinter" method="print"/>
 
-    <integration:gateway service-interface="com.example.springintegration.CarGateWay" default-request-channel="httpChannel"/>
+    <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>
 </beans>

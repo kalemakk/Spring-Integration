@@ -17,13 +17,16 @@ import java.util.concurrent.ExecutionException;
 @ImportResource("classpath*:context.xml")
 public class SpringIntegrationApplication implements ApplicationRunner {
 
+    @Autowired
+    CarGateWay carGateWay;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringIntegrationApplication.class, args);
     }
 
     public void run(ApplicationArguments arguments) throws InterruptedException, ExecutionException {
-        Car car = new Car(2,"4MATICS","Toyota");
+//        Car car = new Car(2,"4MATICS","Toyota");
+        carGateWay.print("hello");
     }
 
 }
