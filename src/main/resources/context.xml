@@ -14,12 +14,20 @@
 
     <integration:channel id="httpChannel"/>
     <integration:channel id="outboundChannel"/>
+    <integration:channel id="replyChannel"/>
+    <integration:channel id="replyChannel2"/>
+    <integration:channel id="replyChannel3"/>
 
-    <http:outbound-channel-adapter
-            channel="outboundChannel"
+
+    <http:outbound-gateway
+            request-channel="outboundChannel"
             http-method="GET"
-            url="http://localhost:8080/"
-    />
+            url="https://api.github.com/users/kalemakk"
+            reply-channel="replyChannel"
+            expected-response-type="java.lang.String">
+<!--        <http:uri-variable name="name" expression="payload" />-->
+    </http:outbound-gateway>
+
 
     <integration:gateway service-interface="com.example.springintegration.CarGateWay" default-request-channel="outboundChannel"/>
 
@@ -27,9 +35,16 @@
             request-channel="httpChannel"
             path="/"
             supported-methods="GET"
+
     />
 
     <integration:service-activator input-channel="httpChannel" ref="messagePrinter" method="print"/>
 
     <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>
+
+
+    <integration:service-activator input-channel="replyChannel" ref="messagePrinter2" method="printConsole"/>
+
+    <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter2"/>
+
 </beans>
