@@ -13,17 +13,21 @@
          http://www.springframework.org/schema/integration/spring-integration.xsd">
 
     <integration:channel id="httpChannel"/>
-
-    <http:inbound-gateway
-            request-channel="httpChannel"
-            path="/"
-            supported-methods="GET"
-    >
-
-    </http:inbound-gateway>
+    <integration:channel id="outboundChannel"/>
 
 
-    <integration:service-activator ref="messagePrinter" method="print" input-channel="httpChannel"/>
-    <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>
 
+    <http:outbound-channel-adapter
+            channel="httpChannel"
+
+
+    />
+
+    <http:inbound-gateway request-channel="httpChannel"
+                          path="/"
+
+    />
+
+
+    <integration:gateway service-interface="com.example.springintegration.CarGateWay" default-request-channel="httpChannel"/>
 </beans>
