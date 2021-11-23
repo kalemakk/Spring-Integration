@@ -22,11 +22,12 @@
     <http:outbound-gateway
             request-channel="outboundChannel"
             http-method="GET"
-            url="https://api.github.com/users/kalemakk"
+            url="https://samples.openweathermap.org/data/2.5/weather?q={city}"
             reply-channel="replyChannel"
             expected-response-type="java.lang.String">
-<!--        <http:uri-variable name="name" expression="payload" />-->
+        <http:uri-variable name="city" expression="payload" />
     </http:outbound-gateway>
+
 
 
     <integration:gateway service-interface="com.example.springintegration.CarGateWay" default-request-channel="outboundChannel"/>
