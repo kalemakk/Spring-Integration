@@ -2,34 +2,52 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/integration/jms"
        xmlns:integration="http://www.springframework.org/schema/integration"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/integration/jms
+            https://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+        http://www.springframework.org/schema/integration
+         http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-<!--    <integration:channel id="names"/>-->
-<!--    <integration:service-activator input-channel="names" ref="helloService" method="sayHello1"/>-->
+
+    <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+        <property name="targetConnectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL" value="tcp://127.0.0.1:61616"/>
+            </bean>
+        </property>
+    </bean>
+
+    <integration:channel id="inputChannel"/>
+    <integration:channel id="outChannel"/>
 
 
+    <integration:gateway
+            default-request-channel="inputChannel"
+            service-interface="com.example.springintegration.CarGateWay"
+    />
 
 
+    <bean class="org.apache.activemq.command.ActiveMQQueue" id="activeMQQueue">
+        <constructor-arg value="sample.queue"/>
+    </bean>
 
-<!--    <integration:channel id="inputChannel" />-->
+    <jms:outbound-channel-adapter
+            channel="outChannel"
+            connection-factory="connectionFactory"
+            destination="activeMQQueue"
+    >
 
-<!--    <integration:channel id="outputChannel" >-->
-<!--        <integration:queue capacity="5"/>-->
-<!--    </integration:channel>-->
+    </jms:outbound-channel-adapter>
 
-<!--    <integration:channel id="transChannel" />-->
-<!--    -->
 
-<!--    <integration:service-activator-->
-<!--            input-channel="inputChannel"-->
-<!--            output-channel="outputChannel"-->
-<!--            ref="sayHello"-->
-<!--            method="sayHello"/>-->
-
-<!--    <bean id="sayHello" class="com.example.springintegration.SayHello"/>-->
-<!--    <bean name="helloService" class="com.example.springintegration.SayHello" />-->
-
+    <integration:object-to-string-transformer
+    input-channel="inputChannel"
+    output-channel="outChannel"
+    />
 
 
 </beans>

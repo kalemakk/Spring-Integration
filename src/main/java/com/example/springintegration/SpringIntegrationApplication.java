@@ -14,19 +14,19 @@ import java.util.concurrent.ExecutionException;
 
 @SpringBootApplication
 @Configuration
-@ImportResource("classpath*:hello.xml")
+@ImportResource("classpath*:context.xml")
 public class SpringIntegrationApplication implements ApplicationRunner {
 
     @Autowired
-    PersonGateWay personGateWay;
+    CarGateWay carGateWay;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringIntegrationApplication.class, args);
     }
 
     public void run(ApplicationArguments arguments) throws InterruptedException, ExecutionException {
-        Person person = new Person(2,"Kalema","Arnold");
-        this.personGateWay.save(person);
+        Car car = new Car(2,"4MATICS","Toyota");
+        this.carGateWay.print(car);
     }
 
 }

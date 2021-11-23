@@ -5,6 +5,7 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:int-jdbc="http://www.springframework.org/schema/integration/jdbc"
+       xmlns:jms="http://www.springframework.org/schema/integration/jms"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -13,32 +14,13 @@
            http://www.springframework.org/schema/integration/file
             https://www.springframework.org/schema/integration/file/spring-integration-file.xsd
              http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
-
                  http://www.springframework.org/schema/integration/jdbc
                http://www.springframework.org/schema/integration/jdbc/spring-integration-jdbc.xsd
+
+               http://www.springframework.org/schema/integration/jms
+               http://www.springframework.org/schema/integration/jdbc/spring-integration-jms.xsd
 ">
 
 
-    <integration:channel id="inputChannel"/>
-
-    <jdbc:embedded-database id="datasource" type="H2">
-        <jdbc:script  location="classpath*:init.sql"/>
-    </jdbc:embedded-database>
-
-    <integration:gateway service-interface="com.example.springintegration.PersonGateWay"
-                         default-request-channel="inputChannel"
-
-    />
-
-    <int-jdbc:outbound-channel-adapter
-            data-source="datasource"
-            query="insert into person values(:payload.id,:payload.first_name,:payload.last_name)"
-            channel="inputChannel">
-
-    </int-jdbc:outbound-channel-adapter>
-
-<!--    <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>-->
-
-<!--    <integration:service-activator input-channel="inputChannel" ref="messagePrinter" method="print"/>-->
 
 </beans>
