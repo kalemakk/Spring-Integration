@@ -13,15 +13,17 @@
          http://www.springframework.org/schema/integration/spring-integration.xsd">
 
     <integration:channel id="httpChannel"/>
-    <http:inbound-channel-adapter
-    path="/"
-    supported-methods="GET"
-    channel="httpChannel"
+
+    <http:inbound-gateway
+            request-channel="httpChannel"
+            path="/"
+            supported-methods="GET"
     >
-    </http:inbound-channel-adapter>
 
-    <integration:service-activator ref="messagePrinter" method="printConsole" input-channel="httpChannel"/>
+    </http:inbound-gateway>
+
+
+    <integration:service-activator ref="messagePrinter" method="print" input-channel="httpChannel"/>
     <bean class="com.example.springintegration.MessagePrinter" id="messagePrinter"/>
-
 
 </beans>
