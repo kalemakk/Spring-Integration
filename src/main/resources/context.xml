@@ -43,19 +43,12 @@
     >
     </jms:outbound-channel-adapter>
 
-    <jms:inbound-channel-adapter
-    channel="jmsChannel"
-    connection-factory="connectionFactory"
-    destination="activeMQQueue"
-    >
-        <integration:poller
-        fixed-rate="2"
-        time-unit="SECONDS"
-        >
 
-        </integration:poller>
-    </jms:inbound-channel-adapter>
-    
+    <jms:message-driven-channel-adapter
+    connection-factory="connectionFactory"
+    channel="jmsChannel"
+    destination="activeMQQueue"
+    />
 
     <integration:object-to-string-transformer
     input-channel="inputChannel"
